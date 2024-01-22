@@ -1,4 +1,4 @@
-package toyproject.wintersnack.controller.login;
+package toyproject.wintersnack.domain.login;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;

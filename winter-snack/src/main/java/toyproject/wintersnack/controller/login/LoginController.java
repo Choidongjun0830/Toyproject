@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import toyproject.wintersnack.controller.SessionConst;
+import toyproject.wintersnack.domain.login.LoginForm;
 import toyproject.wintersnack.domain.login.LoginService;
 import toyproject.wintersnack.domain.member.Member;
 @Controller

@@ -3,6 +3,7 @@ package toyproject.wintersnack.domain.member;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import javax.swing.text.html.Option;
 import java.util.*;
 
 @Slf4j
@@ -31,6 +32,16 @@ public class MemberRepository {
         List<Member> allMember = findAllMember();
         for (Member member : allMember) {
             if(member.getLoginId().equals(loginId)) {
+                return Optional.of(member);
+            }
+        }
+        return Optional.empty();
+    }
+
+    public Optional<Member> findByUserId(String userId) {
+        List<Member> allMember = findAllMember();
+        for (Member member : allMember) {
+            if(member.getId().equals(userId)) {
                 return Optional.of(member);
             }
         }

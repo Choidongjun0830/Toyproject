@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        div.m {
+            margin: 20px 0px 0px 0px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" style="max-width: 600px">
+        <div class="py-5 text-center">
+            <h2>Mat & Mut</h2>
+        </div>
+        <div class="py-5 text-center">
+            <h2>내 정보</h2>
+        </div>
+
+        <div>
+            <label for="memberName">이름</label>
+            <input type="text" id="memberName" name="memberName" class="form-control" th:value="${member.name}" readonly>
+        </div>
+        <div>
+            <label for="memberLoginId">Email</label>
+            <input type="text" id="memberLoginId" name="memberLoginId" class="form-control" th:value="${member.loginId}" readonly>
+        </div>
+        <div>
+            <label for="memberRegisterDate">가입일</label>
+            <input type="text" id="memberRegisterDate" name="memberRegisterDate" class="form-control" th:value="${member.registerDate}" readonly>
+        </div>
+        <hr class="my-4">
+        <div class="row">
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button class="btn btn-primary"
+                        onclick="location.href='boardList.html'"
+                        type="button">비밀번호 변경</button>
+                <!--                        th:onclick="|location.href='@{/board/{postId}(postId=${post.id})}'|"-->
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,8 +1,8 @@
 <!DOCTYPE HTML><html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
-    <link th:href="@{/css/bootstrap.min.css}"
-          href="../css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <title>Mat & Mut</title>
 </head>
 <body>
@@ -18,7 +18,7 @@
     <div class="row">
         <div class="col">
             <button class="w-100 btn btn-primary btn-lg" type="button"
-                    th:onclick="|location.href='@{/items}'|">
+                    th:onclick="|location.href='@{/members/member/info}'|">
                 내 정보
             </button>
         </div>
@@ -31,13 +31,16 @@
         </div>
     </div>
     <hr class="my-4">
-    <div class ="row">
-        <div class="col">
-            <button class="w-100 btn btn-primary btn-lg" type="button"
-                    th:onclick="|location.href='@{/board}'|">
-                게시판
-            </button>
-        </div>
+    <div class ="row dropdown">
+        <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            게시판 리스트
+        </button>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/boardList/notice">공지</a></li>
+            <li><a class="dropdown-item" href="/boardList/shoppingInfo">쇼핑 정보</a></li>
+            <li><a class="dropdown-item" href="/boardList/mat">Mat</a></li>
+            <li><a class="dropdown-item" href="/boardList/mut">Mut</a></li>
+        </ul>
     </div>
 </div> <!-- /container -->
 </body>

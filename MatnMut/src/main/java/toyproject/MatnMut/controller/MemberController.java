@@ -1,8 +1,10 @@
 package toyproject.MatnMut.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -32,5 +34,12 @@ public class MemberController {
 
         memberRepository.save(member);
         return "redirect:/"; //home으로 redirect
+    }
+
+    @GetMapping("/member/info")
+    public String memberInfo(@ModelAttribute Member member, HttpServletRequest request, Model model) {
+        Member loginMember = (Member) request.getSession().getAttribute(SessionConst.LOGIN_MEMBER);
+        model.addAttribute("member", loginMember);
+        return "members/memberInfo";
     }
 }

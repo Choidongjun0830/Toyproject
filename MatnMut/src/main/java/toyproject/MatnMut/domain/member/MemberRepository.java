@@ -3,6 +3,7 @@ package toyproject.MatnMut.domain.member;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @Slf4j
@@ -14,6 +15,7 @@ public class MemberRepository {
 
     public Member save(Member member) {
         member.setId(++sequence);
+        member.setRegisterDate(LocalDate.now());
         log.info("save : member = {}", member);
         store.put(member.getId(), member);
         return member;

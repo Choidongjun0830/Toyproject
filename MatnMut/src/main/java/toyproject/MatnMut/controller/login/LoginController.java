@@ -31,11 +31,6 @@ public class LoginController {
 
         Member loginMember = loginService.login(loginForm.getLoginId(), loginForm.getPassword());
 
-        if(loginMember == null) {
-            bindingResult.reject("loginFail","이메일이나 비밀번호가 맞지 않습니다.");
-            return "login/loginForm";
-        }
-
         //로그인 성공 처리
         //세션이 있으면 있는 세션 반환, 없으면 신규 세션 생성(create=True 일때)
         HttpSession loginSession = request.getSession();

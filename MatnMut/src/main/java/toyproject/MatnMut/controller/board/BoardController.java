@@ -20,22 +20,18 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/board")
+@RequestMapping("/boardList")
 public class BoardController {
 
     private final PostRepository postRepository;
 
-    @GetMapping
-    public String boardList(@ModelAttribute Post post, Model model) {
-
-        List<Post> postList = postRepository.findAll();
-        model.addAttribute("postList", postList);
-
-        return "board/boardList";
-    }
-
     @GetMapping("/write")
-    public String boardWriteForm(@ModelAttribute Post post) {
+    public String boardWriteForm(@ModelAttribute Post post, BindingResult bindingResult) {
+
+        if(bindingResult.hasErrors()){
+            return "/login/loginForm";
+        }
+
         return "board/writeForm";
     }
 
@@ -51,8 +47,6 @@ public class BoardController {
         if(loginMemberName == null){
             return "login/loginForm";
         }
-
-
 
         post.setWriter(loginMemberName);
         post.setPostTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm")));
@@ -87,8 +81,35 @@ public class BoardController {
     }
 
     @GetMapping("/notice")
-    public String noticeList(@ModelAttribute Post post) {
-        return "board/notice";
+    public String noticeBoard(@ModelAttribute Post post, Model model) {
+        List<Post> postList = postRepository.findAll();
+        model.addAttribute("postList", postList);
+
+        return "board/noticeBoard";
+    }
+
+    @GetMapping("/shoppingInfo")
+    public String shoppingInfoBoard(@ModelAttribute Post post, Model model) {
+        List<Post> postList = postRepository.findAll();
+        model.addAttribute("postList", postList);
+
+        return "board/shoppingInfoBoard";
+    }
+
+    @GetMapping("/mat")
+    public String matBoard(@ModelAttribute Post post, Model model) {
+        List<Post> postList = postRepository.findAll();
+        model.addAttribute("postList", postList);
+
+        return "board/matBoard";
+    }
+
+    @GetMapping("/mut")
+    public String mutBoard(@ModelAttribute Post post, Model model) {
+        List<Post> postList = postRepository.findAll();
+        model.addAttribute("postList", postList);
+
+        return "board/mutBoard";
     }
 
     @GetMapping("/notice/write")

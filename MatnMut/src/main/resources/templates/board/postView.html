@@ -28,14 +28,14 @@
                 <button type="button"
                         class="btn btn-primary me-md-2"
                         onclick="location.href='boardList.html'"
-                        th:onclick="|location.href='@{/board}'|">목록으로</button>
+                        th:onclick="|location.href='@{/}'|">홈으로</button>
                 <button type="button"
                         class="btn btn-primary"
                         onclick="location.href='editPostForm.html'"
-                        th:onclick="|location.href='@{/board/{postId}/edit(postId=${post.id})}'|">수정</button>
+                        th:onclick="|location.href='@{/boardList/{postId}/edit(postId=${post.id})}'|">수정</button>
                 <button class="btn btn-primary"
                         onclick="location.href='boardList.html'"
-                        th:onclick="|location.href='@{/board/{postId}(postId=${post.id})}'|"
+                        th:onclick="|location.href='@{/boardList/{postId}(postId=${post.id})}'|"
                         type="button">삭제</button>
             </div>
         </div>

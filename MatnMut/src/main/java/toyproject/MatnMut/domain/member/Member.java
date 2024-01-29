@@ -1,5 +1,6 @@
 package toyproject.MatnMut.domain.member;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
@@ -9,21 +10,22 @@ import java.time.LocalDate;
 @Data
 public class Member {
 
+    @NotBlank(groups = UpdateCheck.class)
     private Long id;
 
     private LocalDate registerDate;
 
 //    private LocalDate recentLoginDate;
 
-    @NotEmpty(message = "required")
+    @NotBlank(groups = {SaveCheck.class, UpdateCheck.class})
     private String name;
 
-    @NotEmpty(message = "required")
+    @NotBlank(groups = {SaveCheck.class, UpdateCheck.class})
     private String loginId;
 
-    @NotEmpty(message = "required")
+    @NotBlank(groups = {SaveCheck.class, UpdateCheck.class})
 //    @Length(min=8, max=20)
     private String password;
 
-//    private String nickname;
+    private String nickname;
 }

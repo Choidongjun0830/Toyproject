@@ -36,10 +36,10 @@ public class BoardController {
     }
 
     @PostMapping("/write")
-    public String boardWrite(@Valid @ModelAttribute Post post, HttpServletRequest request, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String boardWrite(@Valid @ModelAttribute Post post, BindingResult bindingResult, HttpServletRequest request, RedirectAttributes redirectAttributes) {
 
         if(bindingResult.hasErrors()){
-            return "board/write";
+            return "board/writeForm";
         }
 
         Member loginMember = (Member) request.getSession().getAttribute(SessionConst.LOGIN_MEMBER);
@@ -56,7 +56,7 @@ public class BoardController {
         redirectAttributes.addAttribute("postId", post.getId());
         redirectAttributes.addAttribute("status", true);
 
-        return "redirect:/board/{postId}"; //리다이렉트를 하지 않으면 글쓴 것이 바로 보이지 않음
+        return "redirect:/boardList/{postId}"; //리다이렉트를 하지 않으면 글쓴 것이 바로 보이지 않음
     }
 
     @GetMapping("/{boardId}")
@@ -77,7 +77,7 @@ public class BoardController {
     @PostMapping("/{postId}/edit")
     public String edit(@PathVariable Long postId, @ModelAttribute Post post) {
         postRepository.update(postId, post);
-        return "redirect:/board/{postId}";
+        return "redirect:/boardList/{postId}";
     }
 
     @GetMapping("/notice")

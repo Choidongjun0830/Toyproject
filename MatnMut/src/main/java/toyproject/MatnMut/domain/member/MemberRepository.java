@@ -48,4 +48,9 @@ public class MemberRepository {
         }
         return Optional.empty();
     }
+
+    public void updatePassword(Long memberId, Member updateMember) {
+        Member loginMember = findById(memberId);
+        loginMember.setPassword(updateMember.getPassword());
+    }
 }

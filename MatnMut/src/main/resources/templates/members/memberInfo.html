@@ -36,8 +36,8 @@
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                 <button class="btn btn-primary"
                         onclick="location.href='boardList.html'"
+                        th:onclick="|location.href='@{/members/member/passwordUpdate}'|"
                         type="button">비밀번호 변경</button>
-                <!--                        th:onclick="|location.href='@{/board/{postId}(postId=${post.id})}'|"-->
             </div>
         </div>
     </div>

@@ -23,13 +23,18 @@
       <option value="잡담">잡담</option>
     </select>
     <div class="mb-3">
-      <label for="exampleFormControlInput1" class="form-label"></label>
-      <input type="text" class="form-control" id="exampleFormControlInput1" th:field="*{title}" placeholder="제목">
+      <label for="title" class="form-label"></label>
+      <input type="text" class="form-control" id="title" th:field="*{title}"
+             th:errorclass="field-error" placeholder="제목">
+      <div class="field-error" th:errors="*{title}">제목 오류</div>
     </div>
 
     <div class="mb-3">
-      <label for="exampleFormControlTextarea1" class="form-label"></label>
-      <textarea class="form-control" id="exampleFormControlTextarea1" rows="7" th:field="*{contents}" placeholder="내용"></textarea>
+
+      <label for="contents" class="form-label"></label>
+      <textarea class="form-control" id="contents" rows="7" th:field="*{contents}"
+                th:errorclass="field-error" placeholder="내용"></textarea>
+      <div class="field-error" th:errors="*{contents}">내용 오류</div>
     </div>
     <hr class="my-4">
     <div class="row">

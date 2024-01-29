@@ -23,13 +23,12 @@ public class LoginController {
     public String loginForm(@ModelAttribute LoginForm loginForm) { return "login/loginForm";}
 
     @PostMapping("/login")
-    public String login(@Valid @ModelAttribute LoginForm loginForm, BindingResult bindingResult, HttpServletRequest request) { //세션 복습
-
-        if(bindingResult.hasErrors()){
-            return "login/loginForm";
-        }
+    public String login(@Valid @ModelAttribute LoginForm loginForm, BindingResult bindingResult, HttpServletRequest request) {
 
         Member loginMember = loginService.login(loginForm.getLoginId(), loginForm.getPassword());
+        if(loginMember == null) {
+            bindingResult.reject("loginError");
+        }
 
         //로그인 성공 처리
         //세션이 있으면 있는 세션 반환, 없으면 신규 세션 생성(create=True 일때)

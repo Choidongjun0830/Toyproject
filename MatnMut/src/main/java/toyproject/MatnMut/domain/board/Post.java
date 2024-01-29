@@ -14,7 +14,7 @@ public class Post {
 
     private String postTime;
 
-    @NotEmpty
+    @NotEmpty()
     private String header;
 
     @NotEmpty

@@ -3,7 +3,7 @@ package toyproject.MatnMut.domain.login;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import toyproject.MatnMut.domain.member.Member;
-import toyproject.MatnMut.domain.member.MemberRepository;
+import toyproject.MatnMut.domain.member.MemberRepositoryWithNoDB;
 
 import java.util.Optional;
 
@@ -11,10 +11,10 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class LoginService {
 
-    private final MemberRepository memberRepository;
+    private final MemberRepositoryWithNoDB memberRepositoryWithNoDB;
 
     public Member login(String loginId, String password) {
-        Optional<Member> findMember = memberRepository.findByLoginId(loginId);
+        Optional<Member> findMember = memberRepositoryWithNoDB.findByLoginId(loginId);
         Member member = findMember.get();
         if(member.getPassword().equals(password)) {
             return member; //로그인 성공

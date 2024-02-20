@@ -1,15 +1,11 @@
 package toyproject.MatnMut.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import toyproject.MatnMut.domain.member.*;
 
@@ -18,7 +14,7 @@ import toyproject.MatnMut.domain.member.*;
 @RequiredArgsConstructor
 public class MemberController {
 
-    private final MemberRepository memberRepository;
+    private final MemberRepositoryWithNoDB memberRepositoryWithNoDB;
 //    private final MemberValidator memberValidator;
 
 //    @InitBinder
@@ -38,7 +34,7 @@ public class MemberController {
             return "members/registerMemberForm";
         }
 
-        memberRepository.save(member);
+        memberRepositoryWithNoDB.save(member);
         return "redirect:/"; //home으로 redirect
     }
 
@@ -60,7 +56,7 @@ public class MemberController {
             return "members/memberInfo";
         }
 
-        memberRepository.updatePassword(member.getId(), member);
+        memberRepositoryWithNoDB.updatePassword(member.getId(), member);
         return "redirect:/members/member/info";
     }
 }

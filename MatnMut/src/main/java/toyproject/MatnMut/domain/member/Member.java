@@ -13,6 +13,7 @@ public class Member {
     @NotBlank(groups = UpdateCheck.class)
     private Long id;
 
+
     private LocalDate registerDate;
 
 //    private LocalDate recentLoginDate;
@@ -28,4 +29,13 @@ public class Member {
     private String password;
 
     private String nickname;
+
+    public Member() {
+    }
+
+    public Member(String name, String loginId, String password) {
+        this.name = name;
+        this.loginId = loginId;
+        this.password = password;
+    }
 }

@@ -8,7 +8,7 @@ import java.util.*;
 
 @Slf4j
 @Repository
-public class MemberRepository {
+public class MemberRepositoryWithNoDB {
 
     private Map<Long, Member> store = new HashMap<>();
     private static long sequence = 0L;

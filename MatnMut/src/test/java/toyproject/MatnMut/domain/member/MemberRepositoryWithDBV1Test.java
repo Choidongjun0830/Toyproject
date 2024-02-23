@@ -1,21 +1,30 @@
 package toyproject.MatnMut.domain.member;
 
+import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import toyproject.MatnMut.connection.ConnectionConst;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
-@Slf4j
-class MemberRepositoryWithDBTest {
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static toyproject.MatnMut.connection.ConnectionConst.*;
 
-    MemberRepositoryWithDB repository = new MemberRepositoryWithDB();
+@Slf4j
+class MemberRepositoryWithDBV1Test {
+    MemberRepositoryWithDBV1 repository;
+    @BeforeEach
+    void beforeEach() throws Exception {
+        HikariDataSource dataSource = new HikariDataSource();
+        dataSource.setJdbcUrl(URL);
+        dataSource.setUsername(USERNAME);
+        dataSource.setPassword(PASSWORD);
+
+        repository = new MemberRepositoryWithDBV1(dataSource);
+    }
 
     @Test
     void crud() throws SQLException {

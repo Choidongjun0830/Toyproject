@@ -1,18 +1,27 @@
 package toyproject.MatnMut.domain.member;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.jdbc.support.JdbcUtils;
 import org.springframework.stereotype.Repository;
 import toyproject.MatnMut.connection.DBConnectionUtil;
 
+import javax.sql.DataSource;
 import java.sql.*;
-import java.sql.Date;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 @Slf4j
 @Repository
-public class MemberRepositoryWithDB {
+public class MemberRepositoryWithDBV1 {
+
+    private final DataSource dataSource;
     private static long sequence = 0L;
+
+    public MemberRepositoryWithDBV1(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     public Member save(Member member) throws SQLException {
         String sql = "insert into member(id, register_date, name, loginid, password) values (?, ?, ?, ?, ?)";
@@ -21,7 +30,7 @@ public class MemberRepositoryWithDB {
         PreparedStatement pstmt = null;
 
         try {
-            con = DBConnectionUtil.getConnection();
+            con = getConnection();
             pstmt = con.prepareStatement(sql);
             pstmt.setLong(1, ++sequence);
             pstmt.setDate(2, Date.valueOf(LocalDate.now()));
@@ -47,7 +56,7 @@ public class MemberRepositoryWithDB {
         ResultSet rs = null;
 
         try {
-            con = DBConnectionUtil.getConnection();
+            con = getConnection();
             pstmt = con.prepareStatement(sql);
             pstmt.setLong(1, id);
 
@@ -78,7 +87,7 @@ public class MemberRepositoryWithDB {
         ResultSet rs = null;
 
         try {
-            con = DBConnectionUtil.getConnection();
+            con = getConnection();
             pstmt = con.prepareStatement(sql);
 
             rs = pstmt.executeQuery();
@@ -109,7 +118,7 @@ public class MemberRepositoryWithDB {
         ResultSet rs = null;
 
         try{
-            con = DBConnectionUtil.getConnection();
+            con = getConnection();
             pstmt = con.prepareStatement(sql);
             pstmt.setString(1, loginId);
 
@@ -142,7 +151,7 @@ public class MemberRepositoryWithDB {
         PreparedStatement pstmt = null;
 
         try{
-            con = DBConnectionUtil.getConnection();
+            con = getConnection();
             pstmt = con.prepareStatement(sql);
             pstmt.setLong(1, id);
 
@@ -155,26 +164,14 @@ public class MemberRepositoryWithDB {
         }
     }
     private void close(Connection con, Statement stmt, ResultSet rs) {
-        if(rs != null) {
-            try{
-                rs.close();
-            } catch (SQLException e) {
-                log.info("error", e);
-            }
-        }
-        if(stmt != null) {
-            try{
-                stmt.close();
-            } catch (SQLException e) {
-                log.info("error", e);
-            }
-        }
-        if(con != null) {
-            try{
-                con.close();
-            } catch (SQLException e) {
-                log.info("error", e);
-            }
-        }
+        JdbcUtils.closeResultSet(rs);
+        JdbcUtils.closeStatement(stmt);
+        JdbcUtils.closeConnection(con);
+    }
+
+    private Connection getConnection() throws SQLException {
+        Connection con = dataSource.getConnection();
+        log.info("get connection = {}, class = {}", con, con.getClass());
+        return con;
     }
 }

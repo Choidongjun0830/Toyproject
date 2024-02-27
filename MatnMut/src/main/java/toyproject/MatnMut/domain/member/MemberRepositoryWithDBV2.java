@@ -3,7 +3,6 @@ package toyproject.MatnMut.domain.member;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.support.JdbcUtils;
 import org.springframework.stereotype.Repository;
-import toyproject.MatnMut.connection.DBConnectionUtil;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -12,14 +11,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+/**
+ * JDBC - ConnectionParam
+ */
 @Slf4j
 @Repository
-public class MemberRepositoryWithDBV1 {
+public class MemberRepositoryWithDBV2 {
 
     private final DataSource dataSource;
     private static long sequence = 0L;
 
-    public MemberRepositoryWithDBV1(DataSource dataSource) {
+    public MemberRepositoryWithDBV2(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
@@ -177,6 +179,40 @@ public class MemberRepositoryWithDBV1 {
         }
     }
 
+    public Member findByNickname(Connection con, String nickname) throws SQLException {
+        String sql = "select * from member where nickname = ?";
+        //넘어온 con을 사용하므로 con 생성X
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, nickname);
+
+            rs = pstmt.executeQuery();
+            if(rs.next()){
+                Member member = new Member();
+                member.setId(rs.getLong("id"));
+                member.setName(rs.getString("name"));
+                member.setRegisterDate(rs.getDate("register_Date").toLocalDate());
+                member.setLoginId(rs.getString("loginId"));
+                member.setPassword(rs.getString("password"));
+                member.setPoint(rs.getInt("point"));
+                member.setNickname(rs.getString("nickname"));
+                return member;
+            } else {
+                throw new NoSuchElementException("member not found nickname = " + nickname);
+            }
+        } catch (SQLException e) {
+            log.error("db error ", e);
+            throw e;
+        } finally {
+            //커넥션은 닫으면 안됨.
+            JdbcUtils.closeResultSet(rs);
+            JdbcUtils.closeStatement(pstmt);
+        }
+    }
+
 
     public void updatePoint(String nickname, int point) throws SQLException {
         String sql = "update member set point = ? where nickname = ?";
@@ -198,6 +234,26 @@ public class MemberRepositoryWithDBV1 {
         }
     }
 
+    public void updatePoint(Connection con, String nickname, int point) throws SQLException {
+        String sql = "update member set point = ? where nickname = ?";
+        //넘어온 con을 사용하므로 con 생성X
+        PreparedStatement pstmt = null;
+
+        try {
+            pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, point);
+            pstmt.setString(2, nickname);
+            int resultSize = pstmt.executeUpdate();
+            log.info("resultSize = {}", resultSize);
+        } catch (SQLException e) {
+            log.error("DB error", e);
+            throw e;
+        } finally {
+            //커넥션은 닫으면 안됨.
+            JdbcUtils.closeStatement(pstmt);
+        }
+    }
+
     public void delete(Long id) throws SQLException {
         String sql = "delete from member where id = ?";
 
@@ -208,6 +264,26 @@ public class MemberRepositoryWithDBV1 {
             con = getConnection();
             pstmt = con.prepareStatement(sql);
             pstmt.setLong(1, id);
+
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            log.error("error", e);
+            throw e;
+        } finally {
+            close(con, pstmt, null);
+        }
+    }
+
+    public void deleteByNickname(String nickname) throws SQLException {
+        String sql = "delete from member where nickname = ?";
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+
+        try{
+            con = getConnection();
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, nickname);
 
             pstmt.executeUpdate();
         } catch (SQLException e) {

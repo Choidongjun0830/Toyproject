@@ -45,6 +45,12 @@
                 Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.
             </div>
         </div>
+        <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">닉네임</label>
+            <input class="form-control" id="nickname" th:field="*{nickname}"
+                   th:errorclass="field-error" placeholder="Nickname">
+            <div class="field-error" th:errors="*{nickname}">닉네임 입력 오류</div>
+        </div>
         <hr class="my-4">
         <div class="row">
             <div class="col m">

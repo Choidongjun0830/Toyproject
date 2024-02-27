@@ -28,7 +28,10 @@ public class Member {
 //    @Length(min=8, max=20)
     private String password;
 
+    @NotBlank(groups = {SaveCheck.class, UpdateCheck.class})
     private String nickname;
+
+    private int point;
 
     public Member() {
     }
@@ -37,5 +40,13 @@ public class Member {
         this.name = name;
         this.loginId = loginId;
         this.password = password;
+    }
+
+    public Member(String name, String loginId, String password, String nickname, int point) {
+        this.name = name;
+        this.loginId = loginId;
+        this.password = password;
+        this.nickname = nickname;
+        this.point = point;
     }
 }

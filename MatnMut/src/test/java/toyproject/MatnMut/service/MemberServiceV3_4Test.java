@@ -10,18 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.transaction.PlatformTransactionManager;
 import toyproject.MatnMut.domain.member.Member;
-import toyproject.MatnMut.domain.member.MemberRepositoryWithDBV3;
+import toyproject.MatnMut.repository.member.MemberRepositoryWithDBV3;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static toyproject.MatnMut.connection.ConnectionConst.*;
 
 @Slf4j
 @SpringBootTest

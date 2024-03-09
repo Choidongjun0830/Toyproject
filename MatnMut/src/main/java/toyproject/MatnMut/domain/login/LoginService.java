@@ -3,7 +3,7 @@ package toyproject.MatnMut.domain.login;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import toyproject.MatnMut.domain.member.Member;
-import toyproject.MatnMut.domain.member.MemberRepositoryWithNoDB;
+import toyproject.MatnMut.repository.member.MemberRepositoryWithNoDB;
 
 import java.util.Optional;
 

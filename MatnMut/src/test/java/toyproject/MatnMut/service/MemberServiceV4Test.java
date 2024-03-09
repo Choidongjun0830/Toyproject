@@ -1,43 +1,69 @@
 package toyproject.MatnMut.service;
 
+import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.aop.support.AopUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 import toyproject.MatnMut.domain.member.Member;
+import toyproject.MatnMut.repository.member.MemberRepository;
 import toyproject.MatnMut.repository.member.MemberRepositoryWithDBV3;
+import toyproject.MatnMut.repository.member.MemberRepositoryWithDBV4_1;
 
+import javax.sql.DataSource;
 import java.sql.SQLException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static toyproject.MatnMut.connection.ConnectionConst.*;
 
-class MemberServiceV3_2Test {
+@Slf4j
+@SpringBootTest
+class MemberServiceV4Test {
     public static final String MEMBER_A = "memberA";
     public static final String MEMBER_B = "memberB";
     public static final String MEMBER_EX = "ex";
-    private MemberRepositoryWithDBV3 memberRepository;
-    private MemberServiceV3_2 memberService;
-
-    @BeforeEach
-    void before() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource(URL,
-                USERNAME, PASSWORD);
-        //JDBC용 트랜잭션 매니저인 DataSourceTransactionManager를 서비스에 주입한다.
-        PlatformTransactionManager transactionManager = new DataSourceTransactionManager(dataSource);
-        memberRepository = new MemberRepositoryWithDBV3(dataSource);
-        memberService = new MemberServiceV3_2(transactionManager, memberRepository);
-    }
+    @Autowired
+    private MemberRepository memberRepository;
+    @Autowired
+    private MemberServiceV4 memberService;
 
     @AfterEach
     void after() throws SQLException {
         memberRepository.deleteByNickname("memberA");
         memberRepository.deleteByNickname("memberB");
         memberRepository.deleteByNickname("ex");
+    }
+    @TestConfiguration
+    static class TestConfig {
+        private final DataSource dataSource;
+
+        public TestConfig(DataSource dataSource) {
+            this.dataSource = dataSource;
+        }
+
+        @Bean
+        MemberRepository memberRepository() {
+            return new MemberRepositoryWithDBV4_1(dataSource);
+        }
+
+        @Bean
+        MemberServiceV4 memberServiceV4() {
+            return new MemberServiceV4(memberRepository());
+        }
+    }
+
+    @Test
+    void AopCheck() {
+        log.info("memberService class = {}", memberService.getClass());
+        log.info("memberRepository class = {}", memberRepository.getClass());
+        Assertions.assertThat(AopUtils.isAopProxy(memberService)).isTrue();
+        Assertions.assertThat(AopUtils.isAopProxy(memberRepository)).isFalse();
+
     }
 
     @Test

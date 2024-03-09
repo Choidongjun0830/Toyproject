@@ -1,8 +1,11 @@
-package toyproject.MatnMut.domain.member;
+package toyproject.MatnMut.repository.member;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.jdbc.support.JdbcUtils;
 import org.springframework.stereotype.Repository;
+import toyproject.MatnMut.domain.member.Member;
+import toyproject.MatnMut.repository.ex.MyDbException;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -12,20 +15,23 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
- * JDBC - ConnectionParam
+ * 예외 누수 문제 해결
+ * 체크 예외를 런타임 예외로 변경
+ * MemberRepository 인터페이스 사용
+ * throws SQLException 제거
  */
 @Slf4j
 @Repository
-public class MemberRepositoryWithDBV2 {
+public class MemberRepositoryWithDBV4_1 implements MemberRepository{
 
     private final DataSource dataSource;
     private static long sequence = 0L;
 
-    public MemberRepositoryWithDBV2(DataSource dataSource) {
+    public MemberRepositoryWithDBV4_1(DataSource dataSource) {
         this.dataSource = dataSource;
     }
-
-    public Member save(Member member) throws SQLException {
+    @Override
+    public Member save(Member member){
         String sql = "insert into member(id, register_date, name, loginid, password, nickname, point) values (?, ?, ?, ?, ?, ?, ?)";
 
         Connection con = null;
@@ -45,15 +51,13 @@ public class MemberRepositoryWithDBV2 {
             pstmt.executeUpdate();
             return member;
         } catch (SQLException e) {
-            log.error("db error", e);
-            throw e;
+            throw new MyDbException(e);
         } finally {
             close(con, pstmt, null);
-            log.info("save : member = {}", member);
         }
     }
-
-    public Member findById(Long id) throws SQLException {
+    @Override
+    public Member findById(Long id) {
         String sql = "select * from member where id = ?";
 
         Connection con = null;
@@ -80,13 +84,13 @@ public class MemberRepositoryWithDBV2 {
                 throw new NoSuchElementException("member not found memberId = " + id);
             }
         } catch (SQLException e) {
-            log.error("db error ", e);
-            throw e;
+            throw new MyDbException(e);
         } finally {
             close(con, pstmt, rs);
         }
     }
-    public List<Member> findAllMember() throws SQLException {
+    @Override
+    public List<Member> findAllMember() {
         String sql = "select * from member";
 
         Connection con = null;
@@ -110,14 +114,13 @@ public class MemberRepositoryWithDBV2 {
             }
             return allMember;
         } catch (SQLException e) {
-            log.error("error", e);
-            throw e;
+            throw new MyDbException(e);
         } finally {
             close(con, pstmt, rs);
         }
     }
-
-    public String findByLoginId(String loginId) throws SQLException {
+    @Override
+    public String findByLoginId(String loginId) {
         String sql = "select name from member where loginId = ?";
 
         Connection con = null;
@@ -138,14 +141,13 @@ public class MemberRepositoryWithDBV2 {
                 throw new NoSuchElementException("member not found loginId = " + loginId);
             }
         } catch (SQLException e) {
-            log.error("error", e);
-            throw e;
+            throw new MyDbException(e);
         } finally {
             close(con,pstmt,rs);
         }
     }
-
-    public Member findByNickname(String nickname) throws SQLException {
+    @Override
+    public Member findByNickname(String nickname) {
         String sql = "select * from member where nickname = ?";
 
         Connection con = null;
@@ -172,49 +174,13 @@ public class MemberRepositoryWithDBV2 {
                 throw new NoSuchElementException("member not found nickname = " + nickname);
             }
         } catch (SQLException e) {
-            log.error("db error ", e);
-            throw e;
+            throw new MyDbException(e);
         } finally {
             close(con, pstmt, rs);
         }
     }
-
-    public Member findByNickname(Connection con, String nickname) throws SQLException {
-        String sql = "select * from member where nickname = ?";
-        //넘어온 con을 사용하므로 con 생성X
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
-
-        try {
-            pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, nickname);
-
-            rs = pstmt.executeQuery();
-            if(rs.next()){
-                Member member = new Member();
-                member.setId(rs.getLong("id"));
-                member.setName(rs.getString("name"));
-                member.setRegisterDate(rs.getDate("register_Date").toLocalDate());
-                member.setLoginId(rs.getString("loginId"));
-                member.setPassword(rs.getString("password"));
-                member.setPoint(rs.getInt("point"));
-                member.setNickname(rs.getString("nickname"));
-                return member;
-            } else {
-                throw new NoSuchElementException("member not found nickname = " + nickname);
-            }
-        } catch (SQLException e) {
-            log.error("db error ", e);
-            throw e;
-        } finally {
-            //커넥션은 닫으면 안됨.
-            JdbcUtils.closeResultSet(rs);
-            JdbcUtils.closeStatement(pstmt);
-        }
-    }
-
-
-    public void updatePoint(String nickname, int point) throws SQLException {
+    @Override
+    public void updatePoint(String nickname, int point)  {
         String sql = "update member set point = ? where nickname = ?";
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -227,34 +193,13 @@ public class MemberRepositoryWithDBV2 {
             int resultSize = pstmt.executeUpdate();
             log.info("resultSize = {}", resultSize);
         } catch (SQLException e) {
-            log.error("DB error", e);
-            throw e;
+            throw new MyDbException(e);
         } finally {
             close(con, pstmt, null);
         }
     }
-
-    public void updatePoint(Connection con, String nickname, int point) throws SQLException {
-        String sql = "update member set point = ? where nickname = ?";
-        //넘어온 con을 사용하므로 con 생성X
-        PreparedStatement pstmt = null;
-
-        try {
-            pstmt = con.prepareStatement(sql);
-            pstmt.setInt(1, point);
-            pstmt.setString(2, nickname);
-            int resultSize = pstmt.executeUpdate();
-            log.info("resultSize = {}", resultSize);
-        } catch (SQLException e) {
-            log.error("DB error", e);
-            throw e;
-        } finally {
-            //커넥션은 닫으면 안됨.
-            JdbcUtils.closeStatement(pstmt);
-        }
-    }
-
-    public void delete(Long id) throws SQLException {
+    @Override
+    public void delete(Long id)  {
         String sql = "delete from member where id = ?";
 
         Connection con = null;
@@ -267,14 +212,13 @@ public class MemberRepositoryWithDBV2 {
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            log.error("error", e);
-            throw e;
+            throw new MyDbException(e);
         } finally {
             close(con, pstmt, null);
         }
     }
-
-    public void deleteByNickname(String nickname) throws SQLException {
+    @Override
+    public void deleteByNickname(String nickname) {
         String sql = "delete from member where nickname = ?";
 
         Connection con = null;
@@ -287,8 +231,7 @@ public class MemberRepositoryWithDBV2 {
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            log.error("error", e);
-            throw e;
+            throw new MyDbException(e);
         } finally {
             close(con, pstmt, null);
         }
@@ -296,11 +239,12 @@ public class MemberRepositoryWithDBV2 {
     private void close(Connection con, Statement stmt, ResultSet rs) {
         JdbcUtils.closeResultSet(rs);
         JdbcUtils.closeStatement(stmt);
-        JdbcUtils.closeConnection(con);
+        //트랜잭션 동기화를 사용하려면 DataSourceUtils를 사용해야함.
+        DataSourceUtils.releaseConnection(con, dataSource);
     }
 
     private Connection getConnection() throws SQLException {
-        Connection con = dataSource.getConnection();
+        Connection con = DataSourceUtils.getConnection(dataSource);
         log.info("get connection = {}, class = {}", con, con.getClass());
         return con;
     }

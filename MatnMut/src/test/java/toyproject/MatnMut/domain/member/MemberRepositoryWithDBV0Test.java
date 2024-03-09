@@ -2,6 +2,7 @@ package toyproject.MatnMut.domain.member;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import toyproject.MatnMut.repository.member.MemberRepositoryWithDBV0;
 
 import java.sql.SQLException;
 import java.util.List;

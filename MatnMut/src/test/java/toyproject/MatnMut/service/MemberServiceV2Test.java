@@ -1,18 +1,16 @@
 package toyproject.MatnMut.service;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import toyproject.MatnMut.domain.member.Member;
-import toyproject.MatnMut.domain.member.MemberRepositoryWithDBV2;
+import toyproject.MatnMut.repository.member.MemberRepositoryWithDBV2;
 
 import java.sql.SQLException;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static toyproject.MatnMut.connection.ConnectionConst.*;
 
 class MemberServiceV2Test {

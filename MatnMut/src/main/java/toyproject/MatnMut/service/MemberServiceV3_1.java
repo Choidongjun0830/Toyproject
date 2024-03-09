@@ -6,11 +6,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import toyproject.MatnMut.domain.member.Member;
-import toyproject.MatnMut.domain.member.MemberRepositoryWithDBV2;
-import toyproject.MatnMut.domain.member.MemberRepositoryWithDBV3;
+import toyproject.MatnMut.repository.member.MemberRepositoryWithDBV3;
 
-import javax.sql.DataSource;
-import java.sql.Connection;
 import java.sql.SQLException;
 
 /**

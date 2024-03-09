@@ -8,8 +8,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.transaction.PlatformTransactionManager;
 import toyproject.MatnMut.domain.member.Member;
-import toyproject.MatnMut.domain.member.MemberRepositoryWithDBV2;
-import toyproject.MatnMut.domain.member.MemberRepositoryWithDBV3;
+import toyproject.MatnMut.repository.member.MemberRepositoryWithDBV3;
 
 import java.sql.SQLException;
 

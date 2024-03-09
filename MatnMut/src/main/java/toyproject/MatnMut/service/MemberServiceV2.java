@@ -3,8 +3,7 @@ package toyproject.MatnMut.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import toyproject.MatnMut.domain.member.Member;
-import toyproject.MatnMut.domain.member.MemberRepositoryWithDBV1;
-import toyproject.MatnMut.domain.member.MemberRepositoryWithDBV2;
+import toyproject.MatnMut.repository.member.MemberRepositoryWithDBV2;
 
 import javax.sql.DataSource;
 import java.sql.Connection;

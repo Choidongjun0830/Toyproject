@@ -1,8 +1,9 @@
-package toyproject.MatnMut.domain.member;
+package toyproject.MatnMut.repository.member;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import toyproject.MatnMut.connection.DBConnectionUtil;
+import toyproject.MatnMut.domain.member.Member;
 
 import java.sql.*;
 import java.sql.Date;
